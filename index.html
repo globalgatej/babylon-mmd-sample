@@ -111,7 +111,7 @@
 
             const havokInstance = await HavokPhysics();
             const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
-            scene.enablePhysics(new BABYLON.Vector3(0, -9.8 * 10, 0), havokPlugin);
+            scene.enablePhysics(new BABYLON.Vector3(0, -9.8 * 5, 0), havokPlugin);
 
             const mmdRuntime = new BABYLONMMD.MmdRuntime(scene, new BABYLONMMD.MmdPhysics(scene));
             mmdRuntime.register(scene);
