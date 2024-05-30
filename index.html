@@ -38,6 +38,7 @@
     <script>
         const canvas = document.getElementById("renderCanvas"); // Get the canvas element
         const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
+
         const assetsPath = 'assets/'
         const pmxPath = assetsPath + 'pmx/'
         const pmxModel = pmxPath + 'Black.pmx'
@@ -55,7 +56,7 @@
 
 
         // Add your code here matching the playground format
-        const createScene = async function () {
+        const createScene = async function (engine) {
 
 
             const scene = new BABYLON.Scene(engine);
@@ -106,7 +107,12 @@
             const vmdLoader = new BABYLONMMD.VmdLoader(scene);
             const modelMotion = await vmdLoader.loadAsync("model_motion", vmdModel);
 
-            const mmdRuntime = new BABYLONMMD.MmdRuntime();
+
+            const havokInstance = await HavokPhysics();
+            const havokPlugin = new BABYLON.HavokPlugin(true, havokInstance);
+            scene.enablePhysics(new BABYLON.Vector3(0, -9.8 * 10, 0), havokPlugin);
+
+            const mmdRuntime = new BABYLONMMD.MmdRuntime(scene, new BABYLONMMD.MmdPhysics(scene));
             mmdRuntime.register(scene);
             const mmdModel = mmdRuntime.createMmdModel(mmdMesh);
 
@@ -132,6 +138,8 @@
 
             mmdRuntime.playAnimation();
 
+            const mmdPlayerControl = new BABYLONMMD.MmdPlayerControl(scene, mmdRuntime, audioPlayer);
+            mmdPlayerControl.showPlayerControl();
 
 
 
@@ -140,7 +148,7 @@
 
         (async function () {
 
-            const scene = await createScene(); //Call the createScene function
+            const scene = await createScene(engine); //Call the createScene function
 
 
             // Register a render loop to repeatedly render the scene
