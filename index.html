@@ -39,6 +39,7 @@
         const canvas = document.getElementById("renderCanvas"); // Get the canvas element
         const engine = new BABYLON.Engine(canvas, true); // Generate the BABYLON 3D engine
 
+
         const assetsPath = 'assets/'
         const pmxPath = assetsPath + 'pmx/'
         const pmxModel = pmxPath + 'Black.pmx'
@@ -127,25 +128,25 @@
             camera.setAnimation("camera_motion");
 
 
-
-
             const audioPlayer = new BABYLONMMD.StreamAudioPlayer(scene);
             audioPlayer.preservesPitch = false;
-            audioPlayer.muted = false;
-
+            audioPlayer.source = wavModel;
 
             mmdRuntime.setAudioPlayer(audioPlayer);
 
-            const mmdPlayerControl = new BABYLONMMD.MmdPlayerControl(scene, mmdRuntime, audioPlayer);
-            mmdPlayerControl.showPlayerControl();
+
 
             mmdRuntime.playAnimation();
+
+            const mmdPlayerControl = new BABYLONMMD.MmdPlayerControl(scene, mmdRuntime, audioPlayer);
+            mmdPlayerControl.showPlayerControl();
 
             return scene;
         };
 
         (async function () {
 
+            canvas.focus();
             const scene = await createScene(engine); //Call the createScene function
 
 
